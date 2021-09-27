@@ -4,12 +4,8 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="edaa8a7c-0d36-49d5-843b-75ff2ae8bc87" name="Default Changelist" comment="init">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="edaa8a7c-0d36-49d5-843b-75ff2ae8bc87" name="Default Changelist" comment="second">
       <change beforePath="$PROJECT_DIR$/android/src/main/kotlin/com/adriankohls/bubble_overlay/BubbleOverlayService.kt" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/kotlin/com/adriankohls/bubble_overlay/BubbleOverlayService.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/res/layout/layout_bubble.xml" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/res/layout/layout_bubble.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/main.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/example/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,6 +45,14 @@
       <option name="presentableId" value="Default" />
       <updated>1632729662760</updated>
     </task>
+    <task id="LOCAL-00001" summary="second">
+      <created>1632757392425</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1632757392425</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -62,5 +66,9 @@
       </map>
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="second" />
+    <option name="LAST_COMMIT_MESSAGE" value="second" />
   </component>
 </project>
