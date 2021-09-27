@@ -30,6 +30,7 @@
         </androidx.cardview.widget.CardView>
 
         <LinearLayout
+            android:visibility="gone"
             android:id="@+id/llDetails"
             android:layout_marginStart="1dp"
             android:layout_width="match_parent"
