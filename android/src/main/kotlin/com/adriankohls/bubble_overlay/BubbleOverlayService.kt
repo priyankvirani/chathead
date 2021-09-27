@@ -34,11 +34,13 @@ class BubbleOverlayService : Service() {
 
     fun updateText(customText: String) {
         val textView = mBubbleView?.findViewById<TextView>(R.id.bubble_custom_text)
+
         if(customText.isEmpty()){
             textView?.visibility = View.GONE
         }else{
             textView?.text = customText
         }
+
     }
 
     fun updateTitle(customText: String) {
@@ -104,18 +106,18 @@ class BubbleOverlayService : Service() {
 
         val params = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             WindowManager.LayoutParams(
-                    WindowManager.LayoutParams.WRAP_CONTENT,
-                    WindowManager.LayoutParams.WRAP_CONTENT,
-                    WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
-                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
-                    PixelFormat.TRANSLUCENT);
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                PixelFormat.TRANSLUCENT);
         } else {
             WindowManager.LayoutParams(
-                    WindowManager.LayoutParams.WRAP_CONTENT,
-                    WindowManager.LayoutParams.WRAP_CONTENT,
-                    WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY,
-                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
-                    PixelFormat.TRANSLUCENT);
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY,
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                PixelFormat.TRANSLUCENT);
         }
 
         //Specify the chat head position
@@ -143,79 +145,51 @@ class BubbleOverlayService : Service() {
 
         val card = mBubbleView?.findViewById<CardView>(R.id.card)
 
-
-
         card?.setOnTouchListener(
-                object : OnTouchListener {
-                    private var lastAction = 0
-                    private var initialX = 0
-                    private var initialY = 0
-                    private var initialTouchX = 0f
-                    private var initialTouchY = 0f
-                    var startX = 0f;
-                    var startY = 0f;
-                    override fun onTouch(v: View, event: MotionEvent): Boolean {
-                        when (event.action) {
-                            MotionEvent.ACTION_DOWN -> {
-                                //remember the initial position.
-                                initialX = params.x
-                                initialY = params.y
+            object : OnTouchListener {
+                private var lastAction = 0
+                private var initialX = 0
+                private var initialY = 0
+                private var initialTouchX = 0f
+                private var initialTouchY = 0f
+                override fun onTouch(v: View, event: MotionEvent): Boolean {
+                    when (event.action) {
+                        MotionEvent.ACTION_DOWN -> {
+                            //remember the initial position.
+                            initialX = params.x
+                            initialY = params.y
 
-                                //get the touch location
-                                initialTouchX = event.rawX
-                                initialTouchY = event.rawY
-                                lastAction = event.action
-                                startX = event.x
-                                startY = event.y
-                                return true
-                            }
-                            MotionEvent.ACTION_UP -> {
-                                //if (lastAction == MotionEvent.ACTION_DOWN) { }
-                                lastAction = event.action
-                                val endX = event.x
-                                val endY = event.y
-                                if (shouldClickActionWork(startX, endX, startY, endY)) {
-                                    Log.e("TAG","Click");
-                                    startActivity(
-                                        FlutterActivity.createDefaultIntent(context as BubbleOverlayService).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                                    );
-                                }
-                                return true
-                            }
-                            MotionEvent.ACTION_MOVE -> {
-                                //Calculate the X and Y coordinates of the view.
-                                params.x = initialX + (event.rawX - initialTouchX).toInt()
-                                params.y = initialY + (event.rawY - initialTouchY).toInt()
-
-                                //Update the layout with new X & Y coordinate
-                                mWindowManager?.updateViewLayout(mBubbleView, params)
-                                lastAction = event.action
-                                return true
-                            }
+                            //get the touch location
+                            initialTouchX = event.rawX
+                            initialTouchY = event.rawY
+                            lastAction = event.action
+                            return true
                         }
-                        return false
+                        MotionEvent.ACTION_UP -> {
+                            //if (lastAction == MotionEvent.ACTION_DOWN) { }
+                            lastAction = event.action
+                            return true
+                        }
+                        MotionEvent.ACTION_MOVE -> {
+                            //Calculate the X and Y coordinates of the view.
+                            params.x = initialX + (event.rawX - initialTouchX).toInt()
+                            params.y = initialY + (event.rawY - initialTouchY).toInt()
+
+                            //Update the layout with new X & Y coordinate
+                            mWindowManager?.updateViewLayout(mBubbleView, params)
+                            lastAction = event.action
+                            return true
+                        }
                     }
+                    return false
                 }
+            }
         )
 
 
 
 
 
-    }
-
-    private val CLICK_ACTION_THRESHOLD = 0.5f
-
-
-    private fun shouldClickActionWork(
-        startX: Float,
-        endX: Float,
-        startY: Float,
-        endY: Float
-    ): Boolean {
-        val differenceX = Math.abs(startX - endX)
-        val differenceY = Math.abs(startY - endY)
-        return if (CLICK_ACTION_THRESHOLD > differenceX && CLICK_ACTION_THRESHOLD > differenceY) true else false
     }
 
     override fun onDestroy() {
@@ -225,5 +199,3 @@ class BubbleOverlayService : Service() {
         super.onDestroy()
     }
 }
-
-
