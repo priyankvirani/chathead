@@ -113,7 +113,7 @@ class _Home extends State<Home> {
             children: [
               ElevatedButton(
                   child: Text('Open Bubble Overlay'),
-                  onPressed: () => bubbleOverlay.openBubble(topText: 'Online',middleText: '1 Ride on way')),
+                  onPressed: () => bubbleOverlay.openBubble(topText: 'Online',middleText: '')),
               ElevatedButton(
                 onPressed: setTopText,
                 child: Text('Set Bubble Top Text'),

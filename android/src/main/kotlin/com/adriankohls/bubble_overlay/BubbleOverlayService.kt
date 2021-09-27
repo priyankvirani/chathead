@@ -34,7 +34,13 @@ class BubbleOverlayService : Service() {
 
     fun updateText(customText: String) {
         val textView = mBubbleView?.findViewById<TextView>(R.id.bubble_custom_text)
-        textView?.text = customText
+
+        if(customText.isEmpty()){
+            textView?.visibility = View.GONE
+        }else{
+            textView?.text = customText
+        }
+
     }
 
     fun updateTitle(customText: String) {
