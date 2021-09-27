@@ -152,6 +152,8 @@ class BubbleOverlayService : Service() {
                 private var initialY = 0
                 private var initialTouchX = 0f
                 private var initialTouchY = 0f
+                var startX = 0f;
+                var startY = 0f;
                 override fun onTouch(v: View, event: MotionEvent): Boolean {
                     when (event.action) {
                         MotionEvent.ACTION_DOWN -> {
@@ -163,11 +165,21 @@ class BubbleOverlayService : Service() {
                             initialTouchX = event.rawX
                             initialTouchY = event.rawY
                             lastAction = event.action
+                            startX = event.x
+                            startY = event.y
                             return true
                         }
                         MotionEvent.ACTION_UP -> {
                             //if (lastAction == MotionEvent.ACTION_DOWN) { }
                             lastAction = event.action
+                            val endX = event.x
+                            val endY = event.y
+                            if (shouldClickActionWork(startX, endX, startY, endY)) {
+                                Log.e("TAG","Click");
+                                startActivity(
+                                    FlutterActivity.createDefaultIntent(context as BubbleOverlayService).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                );
+                            }
                             return true
                         }
                         MotionEvent.ACTION_MOVE -> {
@@ -185,11 +197,19 @@ class BubbleOverlayService : Service() {
                 }
             }
         )
+    }
 
+    private val CLICK_ACTION_THRESHOLD = 0.5f
 
-
-
-
+    private fun shouldClickActionWork(
+        startX: Float,
+        endX: Float,
+        startY: Float,
+        endY: Float
+    ): Boolean {
+        val differenceX = Math.abs(startX - endX)
+        val differenceY = Math.abs(startY - endY)
+        return if (CLICK_ACTION_THRESHOLD > differenceX && CLICK_ACTION_THRESHOLD > differenceY) true else false
     }
 
     override fun onDestroy() {
