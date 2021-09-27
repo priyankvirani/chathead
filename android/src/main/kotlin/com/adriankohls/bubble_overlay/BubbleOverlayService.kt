@@ -145,66 +145,58 @@ class BubbleOverlayService : Service() {
 
         val card = mBubbleView?.findViewById<CardView>(R.id.card)
 
-        card?.setOnClickListener{
-            Log.e("TAG","Click");
-            startActivity(
-                FlutterActivity.createDefaultIntent(context as BubbleOverlayService).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            )
-        }
+        card?.setOnTouchListener(
+            object : OnTouchListener {
+                private var lastAction = 0
+                private var initialX = 0
+                private var initialY = 0
+                private var initialTouchX = 0f
+                private var initialTouchY = 0f
+                var startX = 0f;
+                var startY = 0f;
+                override fun onTouch(v: View, event: MotionEvent): Boolean {
+                    when (event.action) {
+                        MotionEvent.ACTION_DOWN -> {
+                            //remember the initial position.
+                            initialX = params.x
+                            initialY = params.y
 
+                            //get the touch location
+                            initialTouchX = event.rawX
+                            initialTouchY = event.rawY
+                            lastAction = event.action
+                            startX = event.x
+                            startY = event.y
+                            return true
+                        }
+                        MotionEvent.ACTION_UP -> {
+                            //if (lastAction == MotionEvent.ACTION_DOWN) { }
+                            lastAction = event.action
+                            val endX = event.x
+                            val endY = event.y
+                            if (shouldClickActionWork(startX, endX, startY, endY)) {
+                                Log.e("TAG","Click");
+                                startActivity(
+                                    FlutterActivity.createDefaultIntent(context as BubbleOverlayService).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                );
+                            }
+                            return true
+                        }
+                        MotionEvent.ACTION_MOVE -> {
+                            //Calculate the X and Y coordinates of the view.
+                            params.x = initialX + (event.rawX - initialTouchX).toInt()
+                            params.y = initialY + (event.rawY - initialTouchY).toInt()
 
-//        card?.setOnTouchListener(
-//            object : OnTouchListener {
-//                private var lastAction = 0
-//                private var initialX = 0
-//                private var initialY = 0
-//                private var initialTouchX = 0f
-//                private var initialTouchY = 0f
-//                var startX = 0f;
-//                var startY = 0f;
-//                override fun onTouch(v: View, event: MotionEvent): Boolean {
-//                    when (event.action) {
-//                        MotionEvent.ACTION_DOWN -> {
-//                            //remember the initial position.
-//                            initialX = params.x
-//                            initialY = params.y
-//
-//                            //get the touch location
-//                            initialTouchX = event.rawX
-//                            initialTouchY = event.rawY
-//                            lastAction = event.action
-//                            startX = event.x
-//                            startY = event.y
-//                            return true
-//                        }
-//                        MotionEvent.ACTION_UP -> {
-//                            //if (lastAction == MotionEvent.ACTION_DOWN) { }
-//                            lastAction = event.action
-//                            val endX = event.x
-//                            val endY = event.y
-//                            if (shouldClickActionWork(startX, endX, startY, endY)) {
-//                                Log.e("TAG","Click");
-//                                startActivity(
-//                                    FlutterActivity.createDefaultIntent(context as BubbleOverlayService).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-//                                );
-//                            }
-//                            return true
-//                        }
-//                        MotionEvent.ACTION_MOVE -> {
-//                            //Calculate the X and Y coordinates of the view.
-//                            params.x = initialX + (event.rawX - initialTouchX).toInt()
-//                            params.y = initialY + (event.rawY - initialTouchY).toInt()
-//
-//                            //Update the layout with new X & Y coordinate
-//                            mWindowManager?.updateViewLayout(mBubbleView, params)
-//                            lastAction = event.action
-//                            return true
-//                        }
-//                    }
-//                    return false
-//                }
-//            }
-//        )
+                            //Update the layout with new X & Y coordinate
+                            mWindowManager?.updateViewLayout(mBubbleView, params)
+                            lastAction = event.action
+                            return true
+                        }
+                    }
+                    return false
+                }
+            }
+        )
     }
 
     private val CLICK_ACTION_THRESHOLD = 0.5f
